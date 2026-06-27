@@ -1,0 +1,5 @@
+# Proxy /api requests to Vercel backend
+/api/*  https://your-backend-url.vercel.app/api/:splat  200
+
+# Support Single Page Application (SPA) routing
+/*      /index.html                                     200
