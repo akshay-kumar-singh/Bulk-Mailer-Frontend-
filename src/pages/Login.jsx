@@ -1,8 +1,12 @@
-import { Mail, Shield, Zap } from 'lucide-react';
+import { useContext } from 'react';
+import { Mail, Shield, Zap, Sun, Moon } from 'lucide-react';
+import { ThemeContext } from '../App';
 
 const API_URL = '';
 
 export default function Login() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   const handleGoogleLogin = async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/google`);
@@ -15,43 +19,51 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 transition-colors duration-300" style={{ backgroundColor: 'var(--color-bg)' }}>
       {/* Background glow effects */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/8 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Theme toggle */}
+      <button
+        onClick={toggleTheme}
+        className="fixed top-6 right-6 p-3 rounded-xl bg-[var(--color-surface-2)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all cursor-pointer shadow-sm"
+      >
+        {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/25">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/20">
             <Mail className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">MailFlow</h1>
-          <p className="text-text-muted">Send personalized bulk emails safely from your Gmail</p>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-2">MailFlow</h1>
+          <p className="text-[var(--color-text-secondary)]">Send personalized bulk emails safely from your Gmail</p>
         </div>
 
         {/* Login Card */}
         <div className="glass-card rounded-2xl p-8 space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-3/50">
-              <Shield className="w-5 h-5 text-success mt-0.5 shrink-0" />
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--color-surface-3)]/50">
+              <Shield className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-medium text-white">Safe Sending</p>
-                <p className="text-xs text-text-muted">Max 45 emails/day with 3s delays to protect your account</p>
+                <p className="text-sm font-medium text-[var(--color-text-primary)]">Safe Sending</p>
+                <p className="text-xs text-[var(--color-text-muted)]">Max 45 emails/day with 3s delays to protect your account</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-3/50">
-              <Zap className="w-5 h-5 text-warning mt-0.5 shrink-0" />
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[var(--color-surface-3)]/50">
+              <Zap className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-medium text-white">Personalized Emails</p>
-                <p className="text-xs text-text-muted">Use {'{name}'}, {'{company}'} placeholders in your templates</p>
+                <p className="text-sm font-medium text-[var(--color-text-primary)]">Personalized Emails</p>
+                <p className="text-xs text-[var(--color-text-muted)]">Use {'{name}'}, {'{company}'} placeholders in your templates</p>
               </div>
             </div>
           </div>
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-white/10 cursor-pointer"
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-xl transition-all duration-200 hover:shadow-lg border border-gray-200 cursor-pointer"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -62,7 +74,7 @@ export default function Login() {
             Sign in with Google
           </button>
 
-          <p className="text-xs text-center text-text-muted">
+          <p className="text-xs text-center text-[var(--color-text-muted)]">
             We only request permission to send emails on your behalf. Your data stays secure.
           </p>
         </div>

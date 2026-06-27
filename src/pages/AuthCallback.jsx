@@ -23,10 +23,10 @@ export default function AuthCallback({ onLogin }) {
   }, [searchParams, onLogin, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
       <div className="text-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-text-muted">Authenticating...</p>
+        <div className="w-12 h-12 border-4 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-[var(--color-text-muted)]">Authenticating...</p>
       </div>
     </div>
   );
