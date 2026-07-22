@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, XCircle, Clock, Mail, AlertTriangle, Trash2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, Clock, Mail, AlertTriangle, Trash2, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const API_URL = '';
@@ -19,10 +19,44 @@ export default function CampaignDetail() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isResuming, setIsResuming] = useState(false);
 
   useEffect(() => {
     fetchCampaign();
   }, [id]);
+
+  // Auto-refresh every 5s while the campaign is actively sending
+  useEffect(() => {
+    if (campaign?.status !== 'sending') return;
+    const interval = setInterval(fetchCampaign, 5000);
+    return () => clearInterval(interval);
+  }, [campaign?.status, id]);
+
+  const handleResume = async () => {
+    setIsResuming(true);
+    try {
+      const res = await fetch(`${API_URL}/api/email/resume`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: localStorage.getItem('userId'),
+          campaignId: id
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message);
+        fetchCampaign();
+      } else {
+        toast.error(data.error || 'Failed to resume campaign');
+      }
+    } catch {
+      toast.error('Error resuming campaign');
+    } finally {
+      setIsResuming(false);
+    }
+  };
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this campaign and all of its email logs? This action cannot be undone.')) {
@@ -107,14 +141,32 @@ export default function CampaignDetail() {
           </div>
         </div>
 
-        <button
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all text-sm font-semibold cursor-pointer disabled:opacity-50"
-        >
-          <Trash2 className="w-4 h-4" />
-          {isDeleting ? 'Deleting...' : 'Delete Campaign'}
-        </button>
+        <div className="flex items-center gap-3">
+          {campaign.pendingCount > 0 && campaign.status !== 'sending' && (
+            <button
+              onClick={handleResume}
+              disabled={isResuming}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:shadow-lg hover:shadow-indigo-500/25 transition-all text-sm font-semibold cursor-pointer disabled:opacity-50"
+            >
+              <Play className="w-4 h-4" />
+              {isResuming ? 'Resuming...' : `Resume (${campaign.pendingCount} pending)`}
+            </button>
+          )}
+          {campaign.status === 'sending' && (
+            <span className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 text-amber-500 text-sm font-semibold">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              Sending...
+            </span>
+          )}
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all text-sm font-semibold cursor-pointer disabled:opacity-50"
+          >
+            <Trash2 className="w-4 h-4" />
+            {isDeleting ? 'Deleting...' : 'Delete Campaign'}
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
