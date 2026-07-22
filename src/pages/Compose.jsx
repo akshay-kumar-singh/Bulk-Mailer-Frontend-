@@ -189,7 +189,7 @@ export default function Compose({ userId }) {
           <Info className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
           <div className="text-sm">
             <p className="text-blue-600 dark:text-blue-400 font-medium">Safe Sending Limits</p>
-            <p className="text-[var(--color-text-secondary)] mt-1">Max 50 emails/day with 3-second delays between each. Placeholders: <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{name}'}</code> <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{company}'}</code> <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{designation}'}</code></p>
+            <p className="text-[var(--color-text-secondary)] mt-1">Max 50 emails/day with random 3–10 second delays between each. Placeholders: <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{name}'}</code> <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{company}'}</code> <code className="text-[var(--color-accent)] bg-[var(--color-accent-subtle)] px-1.5 py-0.5 rounded font-mono text-xs">{'{designation}'}</code></p>
           </div>
         </div>
 
